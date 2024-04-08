@@ -53,6 +53,7 @@ class _IndexState extends State<HomePage> with SingleTickerProviderStateMixin {
                         return BottomLoading(
                           loading: tab.data.value.pagination.loading,
                           isMore: tab.data.value.pagination.isMore,
+                          loadMore: homeController.loadMore,
                         );
                       }
                     },

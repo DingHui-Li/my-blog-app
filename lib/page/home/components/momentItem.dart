@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:my_blog_app/model/article.dart';
 import 'package:my_blog_app/page/home/components/topic.dart';
+import 'package:my_blog_app/page/photoView.dart';
 
 class MomentItem extends StatelessWidget {
   Article data;
@@ -122,14 +125,19 @@ class MomentItem extends StatelessWidget {
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
       padding: const EdgeInsets.only(top: 5),
-      children: list.map<Widget>((String item) {
+      children: list.asMap().entries.map<Widget>((entry) {
+        int index = entry.key;
+        String item = entry.value;
         return Stack(
           children: [
-            Image.network(
-              item,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
+            Hero(
+              tag: item,
+              child: CachedNetworkImage(
+                imageUrl: item,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             Positioned.fill(
               child: Material(
@@ -137,6 +145,7 @@ class MomentItem extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     print('img open');
+                    Get.to(PhotoView(index: index, imgs: list));
                   },
                 ),
               ),

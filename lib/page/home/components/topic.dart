@@ -14,7 +14,7 @@ class ComTopic extends StatelessWidget {
         print(data);
       },
       child: Padding(
-        padding: EdgeInsets.only(right: 5, bottom: 2, top: 2),
+        padding: EdgeInsets.only(right: 10, bottom: 2, top: 2),
         child: Text(
           '#' + data.name,
           style: TextStyle(

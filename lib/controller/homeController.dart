@@ -30,9 +30,6 @@ class HomeController extends GetxController {
     scrollController.addListener(() {
       if (scrollController.hasClients) {
         headerIsExpanded.value = scrollController.offset >= 190;
-        // if (scrollController.position.extentAfter < 20) {
-        //   loadMore();
-        // }
       }
     });
   }
