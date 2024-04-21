@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:my_blog_app/controller/topicController.dart';
 
 class TopicPage extends StatelessWidget {
-  const TopicPage({Key? key}) : super(key: key);
+  TopicPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

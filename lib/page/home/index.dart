@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:my_blog_app/components/bottomLoading.dart';
 import 'package:my_blog_app/controller/homeController.dart';
+import 'package:my_blog_app/controller/sysController.dart';
 import 'package:my_blog_app/page/home/components/artticleItem.dart';
 import 'package:my_blog_app/page/home/components/momentItem.dart';
 import 'package:my_blog_app/page/home/components/topbar.dart';
@@ -13,62 +16,62 @@ class HomePage extends StatefulWidget {
   _IndexState createState() => _IndexState();
 }
 
-class _IndexState extends State<HomePage> with SingleTickerProviderStateMixin {
-  final HomeController homeController = Get.put(HomeController());
-
-  @override
-  void initState() {
-    super.initState();
-    homeController.tabController =
-        TabController(length: homeController.tabList.length, vsync: this)
-          ..addListener(homeController.onTabChange);
-  }
+class _IndexState extends State<HomePage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  final HomeController homeController = Get.find<HomeController>();
+  SysController sysController = Get.find<SysController>();
 
   @override
   Widget build(BuildContext context) {
-    return NestedScrollView(
-      controller: homeController.scrollController,
+    Widget body = NestedScrollView(
       physics: const BouncingScrollPhysics(),
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) =>
           [Topbar()],
-      body: TabBarView(
-          controller: homeController.tabController,
-          children: homeController.tabList.map((TabData tab) {
-            return Obx(
-              () => RefreshIndicator(
-                  child: ListView.builder(
-                    addAutomaticKeepAlives: false,
-                    padding: const EdgeInsets.all(0),
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: tab.data.value.list.length + 1,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index < tab.data.value.list.length) {
-                        var item = tab.data.value.list[index];
-                        return comItem(
-                          item.type == 'article'
-                              ? ArtticleItem(data: item)
-                              : MomentItem(data: item),
-                        );
-                      } else {
-                        return BottomLoading(
-                          loading: tab.data.value.pagination.loading,
-                          isMore: tab.data.value.pagination.isMore,
-                          loadMore: homeController.loadMore,
-                        );
-                      }
-                    },
-                  ),
-                  onRefresh: () {
-                    return homeController.getList();
-                  }),
-            );
-          }).toList()),
+      body: Container(
+        color: Colors.white,
+        child: Obx(
+          () => RefreshIndicator(
+            triggerMode: RefreshIndicatorTriggerMode.anywhere,
+            onRefresh: () {
+              return homeController.getList(type: PageDataType.Moment);
+            },
+            child: ListView.builder(
+              addAutomaticKeepAlives: false,
+              padding: const EdgeInsets.all(0),
+              physics: const BouncingScrollPhysics(),
+              itemCount: homeController.momentData.value.list.length + 1,
+              itemBuilder: (BuildContext context, int index) {
+                if (index < homeController.momentData.value.list.length) {
+                  var item = homeController.momentData.value.list[index];
+                  return comItem(
+                    item.type == 'article'
+                        ? ArtticleItem(data: item)
+                        : MomentItem(data: item),
+                  );
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 80),
+                    child: BottomLoading(
+                      loading:
+                          homeController.momentData.value.pagination.loading,
+                      isMore: homeController.momentData.value.pagination.isMore,
+                      loadMore: () =>
+                          homeController.loadMore(type: PageDataType.Moment),
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ),
+      ),
     );
+    return body;
   }
 
   Widget comItem(Widget widget) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(15, 30, 15, 30),
+      padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -80,4 +83,7 @@ class _IndexState extends State<HomePage> with SingleTickerProviderStateMixin {
       child: widget,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

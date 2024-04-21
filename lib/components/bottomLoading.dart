@@ -27,7 +27,7 @@ class BottomLoading extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               loading
-                  ? const LinearProgressIndicator(minHeight: 2)
+                  ? const LinearProgressIndicator(minHeight: 4)
                   : const SizedBox(),
               const SizedBox(height: 10),
               Center(
@@ -35,10 +35,10 @@ class BottomLoading extends StatelessWidget {
                   loading
                       ? '加载中'
                       : isMore
-                          ? '上拉加载'
+                          ? ''
                           : '没有更多了',
                   style:
-                      const TextStyle(fontSize: 12, color: Color(0xff999999)),
+                      const TextStyle(fontSize: 14, color: Color(0xff999999)),
                 ),
               )
             ],

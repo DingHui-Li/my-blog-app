@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 @JsonSerializable()
 class Topic {
   // ignore: prefer_final_fields, unused_field
-  String _id = '';
+  String id = '';
   int createTime = 0;
   String name = '';
   String cover = '';
@@ -17,7 +17,7 @@ class Topic {
 @JsonSerializable()
 class Article {
   // ignore: prefer_final_fields, unused_field
-  String _id = "";
+  String id = "";
   int createTime = 0;
   DateTime createTimeObj = DateTime.now();
   int updateTime = 0;
@@ -78,6 +78,7 @@ class LngLat {
 
 Topic _$TopicFromJson(Map<String, dynamic> json) {
   return Topic()
+    ..id = json['_id'] as String
     ..createTime = json['createTime'] as int
     ..name = json['name'] as String
     ..cover = json['cover'] as String
@@ -85,6 +86,7 @@ Topic _$TopicFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
+      'id': instance.id,
       'createTime': instance.createTime,
       'name': instance.name,
       'cover': instance.cover,
@@ -93,6 +95,7 @@ Map<String, dynamic> _$TopicToJson(Topic instance) => <String, dynamic>{
 
 Article _$ArticleFromJson(Map<String, dynamic> json) {
   var article = Article()
+    ..id = json['_id'] as String
     ..createTime = json['createTime'] as int
     ..createTimeObj =
         DateTime.fromMillisecondsSinceEpoch(json['createTime'] as int)
@@ -104,7 +107,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
     ..type = json['type'] as String
     ..cover = json['cover'] ?? ""
     ..htmlContent = json['htmlContent'] ?? ""
-    ..textContent = json['textContent'] as String
+    ..textContent = json['textContent'] ?? ""
     ..desc = json['desc'] as String
     ..imgs = (json['imgs'] as List<dynamic>).map((e) => e as String).toList()
     ..weather = json['weather'] ?? Map<String, dynamic>()
@@ -120,6 +123,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
+      'id': instance.id,
       'createTime': instance.createTime,
       'createTimeObj': instance.createTimeObj.toIso8601String(),
       'updateTime': instance.updateTime,
